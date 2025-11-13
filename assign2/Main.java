@@ -1,13 +1,18 @@
-package svdP_assTwo;
+package sdvP_assign2;
+
+import java.util.Arrays;
 
 public class Main {
 
 	public static void main(String[] args) {
 		// defining a test array to simulate input
 		double[][] testArr = { { 1.0, Double.NaN, 3.0 }, { Double.NaN, Double.NaN, 2.0 }, { 4.0, 5.0, Double.NaN } };
+
+		// print statements to make output prettier
 		System.out.println("The input array:\n");
 		printArr(testArr);
 		System.out.println("The output array with estimated NaN-Values:\n");
+
 		// run the idw-algorithm
 		idw(testArr);
 	}
@@ -18,8 +23,12 @@ public class Main {
 	 */
 	static double[][] idw(double[][] data) {
 
-		// define array as a copy of input so that it can later be used to store output
-		double[][] result = data;
+		/*
+		 * define result array as a deep copy of input result array will be used to
+		 * store the estimated values input array will only be used to read from
+		 */
+		double[][] result = deepCopyArr(data);
+
 		// we will need those later to temporarily store values during calculation
 		// their explanation follows below, but their names should be self-explanatory
 		double weight;
@@ -31,8 +40,8 @@ public class Main {
 			// iterate over second dimension
 			for (int j = 0; j < data[i].length; j++) {
 				/*
-				 * check if current position is an unknown value if not, than we don't do
-				 * anything with that position
+				 * check if current position is an unknown value. If not, than we don't do
+				 * anything
 				 */
 				if (Double.isNaN(data[i][j])) {
 					/*
@@ -58,8 +67,10 @@ public class Main {
 							}
 						}
 					}
-					// after calculating the sums, we can divide them according to the instruction
-					// to get the estimated value for the position that was previously NaN
+					/*
+					 * after calculating the sums, we can divide them according to the instruction
+					 * to get the estimated value for the position that was previously NaN
+					 */
 					result[i][j] = sumWeightVals / sumWeights;
 				}
 			}
@@ -67,6 +78,24 @@ public class Main {
 		printArr(result);
 		return result;
 	};
+
+	/*
+	 * helper method to deep copy input array - this is needed, so that we don't
+	 * include already calculated NaN-Values for following calculations. Shallow
+	 * copy is not enough, as then both arrays would update.
+	 */
+	static double[][] deepCopyArr(double[][] toCopyArr) {
+
+		// define return array
+		double[][] copiedArr = new double[toCopyArr.length][];
+
+		// deep copy every inside array
+		for (int i = 0; i < toCopyArr.length; i++) {
+			copiedArr[i] = Arrays.copyOf(toCopyArr[i], toCopyArr[i].length);
+		}
+
+		return copiedArr;
+	}
 
 	// helper method to print contents of a double dim array
 	static void printArr(double[][] toPrintArr) {
