@@ -1,7 +1,7 @@
 package sdvP_assign3;
 
 /*
- * Book class as defined in assignment instructions. It's constructor 
+ * Magazine class as defined in assignment instructions. It's constructor 
  * contains the superclass attributes and method. In addition, it has the other
  * attributes as well as the override of the abstract method.
  */
